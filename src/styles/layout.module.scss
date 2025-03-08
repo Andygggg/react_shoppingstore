@@ -1,0 +1,95 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background-color: #212529;
+}
+
+.navbar {
+  width: 100%;
+  height: 78px;
+  min-height: 78px;
+  padding: 0rem 5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 40px;
+  border-bottom: 1px solid rgba(160, 158, 158, 0.5);
+  transition: 0.3s ease-in-out;
+  background-color: #131518;
+
+  > span,
+  i {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #b9b8b8;
+
+    &:first-child {
+      font-size: 28px;
+    }
+
+    &:nth-child(2) {
+      margin-left: auto;
+    }
+
+    &:hover {
+      color: #3e82e7;
+    }
+  }
+}
+
+.container_body {
+  width: 100%;
+  height: auto;
+}
+
+.container_bg {
+  width: 100%;
+  height: 350px;
+  background-image: url("../assets/Air.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  opacity: 0.8;
+  
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(177, 177, 177, 0.2);
+  }
+
+  >p {
+    margin: 0.5rem 0rem;
+    font-size: 36px;
+    font-weight: bolder;
+    z-index: 10;
+  }
+
+  >span {
+    font-size: 16px;
+    font-weight: bolder;
+    z-index: 10;
+  }
+}
+
+.container_content {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}

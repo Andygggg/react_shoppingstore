@@ -1,0 +1,52 @@
+@use "sass:color";
+$primary-color: #0d6efd;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+$success-color: #198754;
+$border-color: #dee2e6;
+$background-color: #f8f9fa;
+
+@mixin button-variant($background, $hover-background) {
+  background-color: $background;
+  border: 1px solid $background;
+
+  &:hover {
+    background-color: $hover-background;
+    border-color: $hover-background;
+  }
+
+  &:disabled {
+    background-color: #858585;
+    border-color: #e7e7e7;
+    color: #fff;
+    cursor: not-allowed;
+  }
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+
+  @media (max-width: 576px) {
+    width: 100%;
+    padding: 8px;
+  }
+
+  &Primary {
+    @include button-variant($primary-color, color.adjust($primary-color, $lightness: -10%));
+  }
+
+  &Danger {
+    @include button-variant($danger-color, color.adjust($danger-color, $lightness: -10%));
+  }
+
+  &Warning {
+    @include button-variant($warning-color, color.adjust($warning-color, $lightness: -10%));
+    color: #000;
+  }
+}

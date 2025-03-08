@@ -1,0 +1,145 @@
+.detail_box {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 2rem 0rem;
+  gap: 20px;
+  margin: 0 auto;
+}
+
+.detail_header {
+  width: 100%;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  > p {
+    font-size: 18px;
+
+    &:not(:last-of-type) {
+      cursor: pointer;
+
+      &:hover {
+        border-bottom: 1px solid #fff;
+      }
+    }
+  }
+}
+
+.detail_img {
+  width: calc(100% - 550px);
+  display: flex;
+  flex-direction: column;
+
+  > img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+  }
+
+  .more {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+
+    > img {
+      max-height: 100px;
+      width: auto;
+      cursor: pointer;
+    }
+  }
+}
+
+.detail_card {
+  width: 500px;
+  height: 500px;
+  border: 1px solid #6e6e6e;
+  background: #4b4b4b60;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .row {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-bottom: 15px;
+
+    .second_title {
+      min-width: 80px;
+      white-space: nowrap;
+    }
+
+    .category {
+      background: #eb9f13;
+      width: 120px;
+      text-align: center;
+      border-radius: 5px;
+      padding: 0.3rem;
+    }
+
+    .money {
+      color: #e73e3e;
+      font-size: 24px;
+    }
+
+    > button {
+      margin-left: auto;
+    }
+  }
+}
+
+.quantity_input {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #8d8d8d83;
+  border-radius: 5px;
+  overflow: hidden;
+
+  > button {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  > input {
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    background: transparent;
+    padding: 0.8rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

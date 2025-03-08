@@ -5,16 +5,19 @@ interface simpleProduct {
   id: string;
   title: string;
   imageUrl: string;
+  imagesUrl: string[];
   content: string;
   description: string;
   origin_price: number;
   price: number;
+  category: string;
 }
 
 interface ProductState {
   goodsList: any[];
   cartList: any[];
   goods: simpleProduct;
+  category: string[],
   currentProduct: any;
   cart: {
     items: any[];
@@ -32,6 +35,7 @@ const initialState: ProductState = {
   goodsList: [],
   cartList: [],
   goods: {} as simpleProduct,
+  category: [],
   currentProduct: null,
   cart: {
     items: [],
@@ -44,6 +48,18 @@ const initialState: ProductState = {
   error: null,
   loadingCartId: null,
 };
+
+export const getAllProducts = createAsyncThunk(
+  "shopping/getAllProducts",
+  async () => {
+    try {
+      const res = await api.get(`/api/${PATH}/products/all`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export const getClientProducts = createAsyncThunk(
   "shopping/getClientProducts",
@@ -165,6 +181,18 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(getAllProducts.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllProducts.fulfilled, (state, action) => {
+        state.category = action.payload.products.map((item: any) => item.category)
+        state.loading = false;
+      })
+      .addCase(getAllProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || null;
+      })
+
       .addCase(getClientProducts.pending, (state) => {
         state.loading = true;
       })
