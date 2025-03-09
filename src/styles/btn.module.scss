@@ -3,6 +3,8 @@ $primary-color: #0d6efd;
 $danger-color: #dc3545;
 $warning-color: #ffc107;
 $success-color: #198754;
+$dark-color: #444;
+$transparent-color: #ffffff00;
 $border-color: #dee2e6;
 $background-color: #f8f9fa;
 
@@ -20,6 +22,10 @@ $background-color: #f8f9fa;
     border-color: #e7e7e7;
     color: #fff;
     cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
   }
 }
 
@@ -48,5 +54,13 @@ $background-color: #f8f9fa;
   &Warning {
     @include button-variant($warning-color, color.adjust($warning-color, $lightness: -10%));
     color: #000;
+  }
+
+  &Dark {
+    @include button-variant($dark-color, color.adjust($dark-color, $lightness: -10%));
+  }
+
+  &Icon {
+    @include button-variant($transparent-color, color.adjust($transparent-color, $lightness: -10%));
   }
 }

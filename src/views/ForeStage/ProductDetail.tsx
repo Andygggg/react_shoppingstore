@@ -18,7 +18,6 @@ const ProductDetail = () => {
 
   useEffect(() => {
     (async () => {
-      console.log(productId);
       await dispatch(getClientProduct(productId));
     })();
   }, [dispatch, productId]);
@@ -36,7 +35,6 @@ const ProductDetail = () => {
   const handleIncrease = () => {
     setCartQuantity((prev) => Math.min(10, prev + 1));
   };
-  console.log(goods);
 
   return (
     <>

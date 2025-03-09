@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
+import LoginModal from "@/components/Modals/LoginModal";
 import { AppDispatch } from "../../stores/store";
 import { getAllProducts } from "@/stores/receptionStore";
 import { useRouter } from "@/router/useRouterManger";
@@ -12,6 +13,11 @@ const ForeStage = () => {
   const parentRoute = router.getCurrentParentRoute();
   const currentRote = router.getCurrentRoute();
   const dispatch = useDispatch<AppDispatch>();
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const openModal = (): void => setIsModalOpen(true);
+  const closeModal = (): void => setIsModalOpen(false);
 
   useEffect(() => {
     (async () => {
@@ -37,25 +43,32 @@ const ForeStage = () => {
               }
             })
           : ""}
-        <i className="bx bxs-user bx-sm"></i>
+        <i className="bx bxs-user bx-sm" onClick={openModal}></i>
       </div>
     );
   };
 
   return (
-    <div className={layoutStyles.container}>
-      <HomeWorkNavbar />
-      <div className={layoutStyles.container_body}>
-        {currentRote?.meta.isNavbar && (
-          <div className={layoutStyles.container_bg}>
-            <p>{currentRote?.meta.title}</p>
+    <>
+      <div className={layoutStyles.container}>
+        <HomeWorkNavbar />
+        <div className={layoutStyles.container_body}>
+          {currentRote?.meta.isNavbar && (
+            <div className={layoutStyles.container_bg}>
+              <p>{currentRote?.meta.title}</p>
+            </div>
+          )}
+          <div className={layoutStyles.container_content}>
+            <Outlet />
           </div>
-        )}
-        <div className={layoutStyles.container_content}>
-          <Outlet />
         </div>
       </div>
-    </div>
+
+      <LoginModal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+      />
+    </>
   );
 };
 
