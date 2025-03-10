@@ -25,7 +25,7 @@ const ForeStage = () => {
     })();
   }, [dispatch]);
 
-  const HomeWorkNavbar = () => {
+  const Navbar = () => {
     return (
       <div className={layoutStyles.navbar}>
         <span onClick={() => router.push("/")}>Breeze & Co.</span>
@@ -51,7 +51,7 @@ const ForeStage = () => {
   return (
     <>
       <div className={layoutStyles.container}>
-        <HomeWorkNavbar />
+        <Navbar />
         <div className={layoutStyles.container_body}>
           {currentRote?.meta.isNavbar && (
             <div className={layoutStyles.container_bg}>

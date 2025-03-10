@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../stores/store";
-import { getClientProduct } from "@/stores/receptionStore";
+import { getClientProduct, addToCart } from "@/stores/receptionStore";
 import { useRouter } from "@/router/useRouterManger";
 
 import detailStyle from "@/styles/ForeStage/ProductDetail.module.scss";
@@ -15,6 +15,7 @@ const ProductDetail = () => {
   const { goods } = useSelector((state: RootState) => state.reception);
   const [cartQuantity, setCartQuantity] = useState<number>(1);
   const [currentImg, setCurrentImg] = useState<string>(goods.imageUrl);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -34,6 +35,12 @@ const ProductDetail = () => {
 
   const handleIncrease = () => {
     setCartQuantity((prev) => Math.min(10, prev + 1));
+  };
+
+  const joinCart = async (id: string) => {
+    setLoading(true);
+    await dispatch(addToCart({ id, qty: cartQuantity }));
+    setLoading(false);
   };
 
   return (
@@ -98,8 +105,13 @@ const ProductDetail = () => {
             <button
               type="button"
               className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
+              onClick={() => joinCart(goods.id)}
             >
-              加入購物車
+              {isLoading ? (
+                <i className="bx bx-loader bx-spin"></i>
+              ) : (
+                "加入購物車"
+              )}
             </button>
           </div>
         </div>

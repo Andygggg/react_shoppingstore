@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import Pagination from "@/components/Tools/Pagination";
 import { AppDispatch, RootState } from "../../stores/store";
-import { getClientProducts } from "@/stores/receptionStore";
+import { getClientProducts, addToCart } from "@/stores/receptionStore";
 import { useRouter } from "@/router/useRouterManger";
 import viewStyle from "@/styles/ForeStage/ProductView.module.scss";
 
@@ -15,6 +15,7 @@ const ProductView = () => {
   );
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [loadingCartId, setLoadingCartId] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -23,14 +24,23 @@ const ProductView = () => {
   }, [dispatch]);
 
   // 處理換頁
-  const handlePageChange = async(page: number) => {
+  const handlePageChange = async (page: number) => {
     setCurrentPage(page);
-    await dispatch(getClientProducts(page)); 
+    await dispatch(getClientProducts(page));
   };
 
   const pushToDetail = (id: string) => {
-    router.push('productDetail', { productId: id})
-  }
+    router.push("productDetail", { productId: id });
+  };
+
+  const joinCart = async (id: string, qty: number) => {
+    setLoadingCartId(id);
+    try {
+      await dispatch(addToCart({ id, qty }));
+    } finally {
+      setLoadingCartId(null);
+    }
+  };
 
   return (
     <>
@@ -48,12 +58,24 @@ const ProductView = () => {
               <img
                 src={item.imageUrl ? item.imageUrl : "test.png"}
                 alt={item.content}
+                onClick={() => pushToDetail(item.id)}
               />
               <p>{item.title}</p>
               <p>{item.description ?? ""}</p>
               <span>
                 <del className="h6">${item.origin_price}</del>${item.price}
-                <i className="bx bx-cart-add bx-sm" onClick={() => pushToDetail(item.id)}></i>
+                <div className={viewStyle.cart_btn}>
+                  {loadingCartId === item.id ? (
+                    <i className="bx bx-loader bx-spin"></i>
+                  ) : (
+                    <i
+                      className="bx bx-cart-add bx-sm"
+                      onClick={() => {
+                        joinCart(item.id, 1);
+                      }}
+                    ></i>
+                  )}
+                </div>
               </span>
             </div>
           ))}

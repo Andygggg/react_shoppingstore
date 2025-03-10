@@ -9,6 +9,7 @@
   padding: 2rem 0rem;
   gap: 20px;
   margin: 0 auto;
+  color: #fff;
 }
 
 .detail_header {
@@ -129,6 +130,10 @@
     font-size: 1.5rem;
     cursor: pointer;
     border-radius: 5px;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   > input {
@@ -137,9 +142,19 @@
     border: none;
     background: transparent;
     padding: 0.8rem;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
 
     &:focus {
       outline: none;
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
   }
 }

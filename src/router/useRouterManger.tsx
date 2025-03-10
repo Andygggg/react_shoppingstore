@@ -7,6 +7,9 @@ import ProductView from '@/views/ForeStage/ProductView';
 import ProductDetail from '@/views/ForeStage/ProductDetail';
 import ShoppingCart from '@/views/ForeStage/ShoppingCart';
 
+import BackStage from '@/views/BackStage/BackStage';
+import ProductList from '@/views/BackStage/ProductList';
+
 interface RouteMeta {   
   title: string;   
   isNavbar?: boolean; 
@@ -66,7 +69,26 @@ export const routes: RouteMenu[] = [
         },       
       },           
     ]   
-  }, 
+  },
+  {     
+    path: "admin",     
+    name: "admin",     
+    component: <BackStage />,     
+    meta: {       
+      title: "後台",     
+    }, 
+    children: [       
+      {         
+        path: "productList",         
+        name: "productList",         
+        component: <ProductList />,         
+        meta: {           
+          title: "產品清單",           
+          isNavbar: true,         
+        },       
+      },
+    ]
+  } 
 ];  
 
 export const useRouter = () => {   
@@ -133,42 +155,122 @@ export const useRouter = () => {
     }
   };  
   
-  // 獲取當前完整路徑的路由資訊   
-  const getCurrentRoute = () => {     
-    const currentPath = location.pathname.replace('/', '');   
-      
-    const findRoute = (routes: RouteMenu[], path: string): RouteMenu | undefined => {       
-      for (const route of routes) {      
-        if (route.path === path) return route;         
-        if (route.children) {           
-          const childPath = path.replace(`${route.path}/`, '');           
-          const childRoute = findRoute(route.children, childPath);           
-          if (childRoute) return childRoute;         
-        }       
-      }       
-      return undefined;     
-    };      
-    
-    return findRoute(routes, currentPath);   
-  };    
+  // 獲取當前完整路徑的路由資訊
+const getCurrentRoute = () => {
+  // 處理 hash 路由格式 (/#/)
+  let currentPath = location.hash ? location.hash.substring(1) : location.pathname;
   
-  // 獲取當前路由的父層路由   
-  const getCurrentParentRoute = () => {     
-    const currentPath = location.pathname;     
-    const findParentRoute = (routes: RouteMenu[]): RouteMenu | undefined => {       
-      for (const route of routes) {         
-        if (route.children) {           
-          // 檢查當前路徑是否以父路由路徑開頭           
-          if (currentPath.startsWith(route.path)) {             
-            return route;           
-          }         
-        }       
-      }       
-      return undefined;     
-    };      
+  // 確保路徑以 / 開頭
+  if (!currentPath.startsWith('/')) {
+    currentPath = `/${currentPath}`;
+  }
+  
+  // 移除結尾的斜線（除了根路徑）
+  if (currentPath.length > 1 && currentPath.endsWith('/')) {
+    currentPath = currentPath.slice(0, -1);
+  }
+  
+  // 如果是根路徑
+  if (currentPath === '/') {
+    const rootRoute = routes.find(route => route.path === '/');
+    if (rootRoute) {
+      // 檢查是否有預設子路由
+      if (rootRoute.children && rootRoute.children.length > 0) {
+        const defaultChild = rootRoute.children[0];
+        const defaultPath = `/${defaultChild.path}`;
+        // 如果當前正好是預設路徑，返回該子路由
+        if (location.hash === `#${defaultPath}` || location.hash === `#/${defaultChild.path}`) {
+          return defaultChild;
+        }
+      }
+      return rootRoute;
+    }
+  }
+  
+  // 查找匹配的路由
+  for (const route of routes) {
+    const routePath = route.path.startsWith('/') ? route.path : `/${route.path}`;
     
-    return findParentRoute(routes);   
-  };    
+    // 直接匹配路由
+    if (currentPath === routePath) {
+      return route;
+    }
+    
+    // 檢查子路由
+    if (route.children && route.children.length > 0) {
+      // 檢查路徑是否在此父路由下
+      const pathWithoutParent = routePath === '/' 
+        ? currentPath 
+        : currentPath.startsWith(`${routePath}/`) 
+          ? currentPath.substring(routePath.length + 1) 
+          : '';
+      
+      if (pathWithoutParent !== '' || routePath === '/') {
+        // 查找匹配的子路由
+        for (const child of route.children) {
+          if (routePath === '/' && currentPath === `/${child.path}`) {
+            return child;
+          } else if (pathWithoutParent === child.path) {
+            return child;
+          }
+        }
+      }
+    }
+  }
+  
+  return undefined;
+};
+
+// 獲取當前路由的父層路由
+const getCurrentParentRoute = () => {
+  // 處理 hash 路由格式 (/#/)
+  let currentPath = location.hash ? location.hash.substring(1) : location.pathname;
+  
+  // 確保路徑以 / 開頭
+  if (!currentPath.startsWith('/')) {
+    currentPath = `/${currentPath}`;
+  }
+  
+  // 移除結尾的斜線（除了根路徑）
+  if (currentPath.length > 1 && currentPath.endsWith('/')) {
+    currentPath = currentPath.slice(0, -1);
+  }
+  
+  // 根路徑下的頁面
+  if (currentPath === '/') {
+    return undefined; // 根路徑沒有父路由
+  }
+  
+  // 針對根路徑下的子路由，如 /homePage
+  const rootPath = routes.find(route => route.path === '/');
+  if (rootPath && rootPath.children) {
+    for (const child of rootPath.children) {
+      if (currentPath === `/${child.path}`) {
+        return rootPath;
+      }
+    }
+  }
+  
+  // 查找其他父層路由
+  for (const route of routes) {
+    const routePath = route.path.startsWith('/') ? route.path : `/${route.path}`;
+    
+    // 跳過沒有子路由的路由
+    if (!route.children || route.children.length === 0) {
+      continue;
+    }
+    
+    // 不是根路由
+    if (routePath !== '/') {
+      // 檢查當前路徑是否以此路由開頭
+      if (currentPath === routePath || currentPath.startsWith(`${routePath}/`)) {
+        return route;
+      }
+    }
+  }
+  
+  return undefined;
+}; 
   
   return {     
     push,     

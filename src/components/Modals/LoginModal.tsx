@@ -1,4 +1,11 @@
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent } from "react";
+import { useDispatch } from "react-redux";
+
+import { useRouter } from "@/router/useRouterManger";
+import { AppDispatch } from "../../stores/store";
+import { loginUser } from "../../stores/userStore";
+import { openMessage } from "@/stores/messageStore";
+
 import loginStyle from "@/styles/Modal/LoginModal.module.scss";
 import btnStyle from "@/styles/btn.module.scss";
 
@@ -10,23 +17,43 @@ interface LoginModalProps {
 
 // 使用函數聲明而非 React.FC
 const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
+  
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 這裡處理登入邏輯
-    console.log("Login attempt with:", username, password);
-    // 登入成功後可以關閉modal
-    // onClose();
+
+    try {
+      const { message, success } = await dispatch(loginUser(user)).unwrap();
+
+      dispatch(
+        openMessage({
+          success,
+          message,
+        })
+      );
+      if (success) router.push("admin");
+    } catch (error) {
+      dispatch(
+        openMessage({
+          success: false,
+          message: "登入失敗",
+        })
+      );
+      console.error("登入失敗:", error);
+    }
   };
 
-  const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const handleInput = (name: string, value: string) => {
+    setUser((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   // 如果 isOpen 為 false，則不渲染任何內容
@@ -50,8 +77,8 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
             <input
               id="username"
               type="text"
-              value={username}
-              onChange={handleUsernameChange}
+              value={user.username}
+              onChange={(e) => handleInput("username", e.target.value)}
               placeholder="請輸入用戶名"
               required
             />
@@ -62,8 +89,8 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
             <input
               id="password"
               type="password"
-              value={password}
-              onChange={handlePasswordChange}
+              value={user.password}
+              onChange={(e) => handleInput("password", e.target.value)}
               placeholder="請輸入密碼"
               required
             />

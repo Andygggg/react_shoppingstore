@@ -77,6 +77,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color: #fff;
 
     &:first-of-type {
       font-size: 20px;
@@ -100,8 +101,11 @@
       color: rgb(134, 134, 134);
     }
 
-    > i {
+    .cart_btn {
       margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: rgb(248, 41, 41);
       color: #fff;
       padding: 4px;

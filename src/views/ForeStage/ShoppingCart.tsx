@@ -11,12 +11,14 @@ import {
   orderCart,
 } from "@/stores/receptionStore";
 import { openMessage } from "@/stores/messageStore";
+import { useRouter } from "@/router/useRouterManger";
 
 import cartStyle from "@/styles/ForeStage/ShoppingCart.module.scss";
 import btnStyle from "@/styles/btn.module.scss";
 
 const ShoppingCart = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const router= useRouter()
   const { cartList } = useSelector((state: RootState) => state.reception);
   const [isOrder, setIsOrder] = useState(false);
 
@@ -41,7 +43,7 @@ const ShoppingCart = () => {
     })();
   }, [dispatch]);
 
-  console.log(cartList);
+  // console.log(cartList);
 
   const clearCart = async () => {
     await dispatch(delAllCart());
@@ -59,7 +61,7 @@ const ShoppingCart = () => {
   };
 
   const onSubmit = async (order: any) => {
-    const {message, success} = await dispatch(orderCart(order)).unwrap();
+    const { message, success } = await dispatch(orderCart(order)).unwrap();
     reset();
 
     dispatch(
@@ -165,10 +167,16 @@ const ShoppingCart = () => {
           </table>
         </div>
         <div className={cartStyle.btn_group}>
-          <button className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}>
+          <button
+            className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
+            onClick={() => router.push("productView")}
+          >
             繼續購物
           </button>
-          <button className={`${btnStyle.btn} ${btnStyle.btnPrimary}`} onClick={() => setIsOrder(true)}>
+          <button
+            className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
+            onClick={() => setIsOrder(true)}
+          >
             前往結帳
           </button>
         </div>
@@ -253,6 +261,24 @@ const ShoppingCart = () => {
               {...register("message")}
             />
           </div>
+
+          <div className={cartStyle.btn_item}>
+            <button
+              type="button"
+              className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
+              onClick={() => setIsOrder(false)}
+            >
+              返回
+            </button>
+
+            <button
+              type="submit"
+              className={`${btnStyle.btn} ${btnStyle.btnDanger}`}
+              disabled={cartList.length < 1}
+            >
+              送出訂單
+            </button>
+          </div>
         </form>
 
         <div className={cartStyle.cart_checkout}>
@@ -262,24 +288,19 @@ const ShoppingCart = () => {
               <span>產品</span>
               <span>總計</span>
             </li>
-            <li>
-              <span>瑪格麗特披薩 x 1</span>
-              <span>$ 399</span>
-            </li>
+            {cartList.map((item) => (
+              <li key={item.id}>
+                <span>
+                  {item.product.title} x {item.qty}
+                </span>
+                <span>$ {item.total}</span>
+              </li>
+            ))}
             <li>
               <span>總計</span>
-              <span>$ 399</span>
+              <span>$ {cartList.reduce((acc, obj) => acc + obj.total, 0)}</span>
             </li>
           </ul>
-          <div className={cartStyle.submit}>
-            <button
-              type="button"
-              className={`${btnStyle.btn} ${btnStyle.btnDanger}`}
-              disabled={cartList.length < 1}
-            >
-              送出訂單
-            </button>
-          </div>
         </div>
       </>
     );

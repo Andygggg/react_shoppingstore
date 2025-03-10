@@ -1,27 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api, PATH } from "../plugins/axios";
-
-interface simpleProduct {
-  id: string;
-  title: string;
-  imageUrl: string;
-  imagesUrl: string[];
-  content: string;
-  description: string;
-  origin_price: number;
-  price: number;
-  category: string;
-}
+import { Product } from "@/typings";
 
 interface ProductState {
-  goodsList: any[];
+  goodsList: Product[];
   cartList: any[];
-  goods: simpleProduct;
+  goods: Product;
   category: string[],
-  currentProduct: any;
-  cart: {
-    items: any[];
-  };
   pagination: {
     current_page: number;
     total_pages: number;
@@ -34,12 +19,8 @@ interface ProductState {
 const initialState: ProductState = {
   goodsList: [],
   cartList: [],
-  goods: {} as simpleProduct,
+  goods: {} as Product,
   category: [],
-  currentProduct: null,
-  cart: {
-    items: [],
-  },
   pagination: {
     current_page: 1,
     total_pages: 1,
