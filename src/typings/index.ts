@@ -1,4 +1,4 @@
-export interface Product {
+export interface cartProduct {
   category: string;
   content: string;
   description: string;
@@ -11,3 +11,19 @@ export interface Product {
   title: string;
   unit: string;
 };
+
+export interface Product {
+  id?: string; // `id` 在 Products 內有，但在 Product 內沒有
+  category: string;
+  content: string;
+  description: string;
+  is_enabled: number;
+  origin_price: number;
+  price: number;
+  title: string;
+  unit: string;
+  num?: number; // `num` 只在 Products 內出現
+  imageUrl: string;
+  imagesUrl: string[];
+  saveYear?: number; // `saveYear` 只在 Product 內出現
+}

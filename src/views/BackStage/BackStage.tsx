@@ -25,7 +25,7 @@ const BackStage = () => {
               }
             })
           : ""}
-        <i className="bx bxs-user bx-sm"></i>
+        <i className='bx bxs-log-out bx-sm'></i>
       </div>
     );
   };

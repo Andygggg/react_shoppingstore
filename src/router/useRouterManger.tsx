@@ -9,6 +9,7 @@ import ShoppingCart from '@/views/ForeStage/ShoppingCart';
 
 import BackStage from '@/views/BackStage/BackStage';
 import ProductList from '@/views/BackStage/ProductList';
+import ProductForm from '@/views/BackStage/ProductForm';
 
 interface RouteMeta {   
   title: string;   
@@ -87,6 +88,15 @@ export const routes: RouteMenu[] = [
           isNavbar: true,         
         },       
       },
+      {         
+        path: "productForm",         
+        name: "productForm",         
+        component: <ProductForm />,         
+        meta: {           
+          title: "產品表單",           
+          isNavbar: false,         
+        },       
+      },
     ]
   } 
 ];  
@@ -114,14 +124,16 @@ export const useRouter = () => {
         if (route.name === targetName) {
           return {
             route,
-            fullPath: route.path
+            fullPath: route.path.startsWith('/') ? route.path : `/${route.path}`
           };
         }
         
         if (route.children) {
           const childResult = route.children.find(child => child.name === targetName);
           if (childResult) {
-            const fullPath = `${route.path}/${childResult.path}`.replace('//', '/');
+            // 確保父路徑和子路徑正確組合
+            const parentPath = route.path === '/' ? '' : route.path;
+            const fullPath = `${parentPath}/${childResult.path}`.replace('//', '/');
             return {
               route: childResult,
               fullPath
@@ -143,17 +155,22 @@ export const useRouter = () => {
     const routeInfo = findRouteByName(routes, pathOrName);
     
     if (routeInfo) {
+      // 關鍵修改：確保路徑始終是絕對路徑
+      const absolutePath = routeInfo.fullPath.startsWith('/') 
+        ? routeInfo.fullPath 
+        : `/${routeInfo.fullPath}`;
+      
       // 如果有參數，添加到 state 中
       if (params) {
-        navigate(routeInfo.fullPath, { state: params });
+        navigate(absolutePath, { state: params });
       } else {
-        navigate(routeInfo.fullPath);
+        navigate(absolutePath);
       }
     } else {
       // 如果找不到路由，導向到起始路徑
       navigate('/');
     }
-  };  
+  };
   
   // 獲取當前完整路徑的路由資訊
 const getCurrentRoute = () => {

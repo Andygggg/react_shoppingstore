@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api, PATH } from "../plugins/axios";
-import { Product } from "@/typings";
+import { cartProduct } from "@/typings";
 
 interface ProductState {
-  goodsList: Product[];
+  goodsList: cartProduct[];
   cartList: any[];
-  goods: Product;
+  goods: cartProduct;
   category: string[],
   pagination: {
     current_page: number;
@@ -19,7 +19,7 @@ interface ProductState {
 const initialState: ProductState = {
   goodsList: [],
   cartList: [],
-  goods: {} as Product,
+  goods: {} as cartProduct,
   category: [],
   pagination: {
     current_page: 1,

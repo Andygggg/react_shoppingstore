@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api, apiAuth, PATH } from "../plugins/axios";
 
+import type { Product } from "@/typings";
+
 const initialState: ProductState = {
   products: [],
   pagination: {} as Pagination,
@@ -119,37 +121,8 @@ const productSlice = createSlice({
 
 export default productSlice.reducer;
 
-export interface Product {
-  category: string;
-  content: string;
-  description: string;
-  is_enabled: number;
-  origin_price: number;
-  price: number;
-  title: string;
-  unit: string;
-  imageUrl: string;
-  imagesUrl: string[];
-  saveYear?: number;
-}
-
-export interface Products {
-  id: string;
-  category: string;
-  content: string;
-  description: string;
-  is_enabled: number;
-  origin_price: number;
-  price: number;
-  title: string;
-  unit: string;
-  num: number;
-  imageUrl: string;
-  imagesUrl: string[];
-}
-
 interface ProductState {
-  products: Products[];
+  products: Product[];
   pagination: Pagination;
   loading: boolean;
   error: string | null;
