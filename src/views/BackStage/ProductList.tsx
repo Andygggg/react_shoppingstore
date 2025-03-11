@@ -88,7 +88,7 @@ const ProductList = () => {
   }, []);
 
   if (loading) {
-    return <div className={productStyle.loading}>載入中...</div>;
+    return <div className={productStyle.loading}><i className="bx bx-loader bx-spin bx-lg"></i></div>;
   }
 
   if (error) {

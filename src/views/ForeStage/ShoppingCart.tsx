@@ -18,7 +18,7 @@ import btnStyle from "@/styles/btn.module.scss";
 
 const ShoppingCart = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const router= useRouter()
+  const router = useRouter();
   const { cartList } = useSelector((state: RootState) => state.reception);
   const [isOrder, setIsOrder] = useState(false);
 
@@ -46,8 +46,15 @@ const ShoppingCart = () => {
   // console.log(cartList);
 
   const clearCart = async () => {
-    await dispatch(delAllCart());
+    const { message, success } = await dispatch(delAllCart()).unwrap();
     await dispatch(getClientCart());
+
+    dispatch(
+      openMessage({
+        success,
+        message,
+      })
+    );
   };
 
   const editCart = async (id: string, product_id: string, qty: number) => {
@@ -56,8 +63,15 @@ const ShoppingCart = () => {
   };
 
   const removeGoods = async (id: string) => {
-    await dispatch(delGoods(id));
+    const { message, success } = await dispatch(delGoods(id)).unwrap();
     await dispatch(getClientCart());
+
+    dispatch(
+      openMessage({
+        success,
+        message,
+      })
+    );
   };
 
   const onSubmit = async (order: any) => {
@@ -71,6 +85,8 @@ const ShoppingCart = () => {
       })
     );
     await dispatch(getClientCart());
+
+    router.push("foreStage");
   };
 
   const CartTable = () => {
@@ -84,15 +100,7 @@ const ShoppingCart = () => {
                 <th>產品名稱</th>
                 <th>數量</th>
                 <th>單價</th>
-                <th>
-                  <button
-                    className={`${btnStyle.btn} ${btnStyle.btnDanger}`}
-                    onClick={clearCart}
-                    disabled={cartList.length < 1}
-                  >
-                    清空購物車
-                  </button>
-                </th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -105,8 +113,8 @@ const ShoppingCart = () => {
                         alt={cart.product.title}
                       />
                     </td>
-                    <td>{cart.product.title}</td>
-                    <td>
+                    <td data-label="產品名稱">{cart.product.title}</td>
+                    <td data-label="數量">
                       <div className={cartStyle.quantity_input}>
                         <button
                           onClick={() =>
@@ -141,7 +149,7 @@ const ShoppingCart = () => {
                         </button>
                       </div>
                     </td>
-                    <td>{cart.product.price}元</td>
+                    <td data-label="單價">{cart.product.price}元</td>
                     <td>
                       <button
                         className={`${btnStyle.btn} ${btnStyle.btnIcon}`}
@@ -158,10 +166,9 @@ const ShoppingCart = () => {
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan={4} className={cartStyle.text_end}>
-                  總計:
+                <td colSpan={5} className={cartStyle.text_end}>
+                  總計：{cartList.reduce((sum, cart) => sum + cart.total, 0)}
                 </td>
-                <td>{cartList.reduce((sum, cart) => sum + cart.total, 0)}</td>
               </tr>
             </tfoot>
           </table>
@@ -172,6 +179,13 @@ const ShoppingCart = () => {
             onClick={() => router.push("productView")}
           >
             繼續購物
+          </button>
+          <button
+            className={`${btnStyle.btn} ${btnStyle.btnDanger}`}
+            onClick={clearCart}
+            disabled={cartList.length < 1}
+          >
+            清空購物車
           </button>
           <button
             className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}

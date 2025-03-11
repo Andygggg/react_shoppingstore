@@ -113,13 +113,20 @@ $background-color: #f8f9fa;
 }
 
 .loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 200px;
-  font-size: 18px;
-  color: #666;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
 }
+
+
 
 .error {
   padding: 16px;

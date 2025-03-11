@@ -16,6 +16,7 @@ const ProductView = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingCartId, setLoadingCartId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -27,6 +28,12 @@ const ProductView = () => {
   const handlePageChange = async (page: number) => {
     setCurrentPage(page);
     await dispatch(getClientProducts(page));
+  };
+
+  // 處理類別選擇
+  const handleCategorySelect = (categoryName: string | null) => {
+    setSelectedCategory(categoryName);
+    setCurrentPage(1); // 重置頁面到第一頁
   };
 
   const pushToDetail = (id: string) => {
@@ -42,49 +49,73 @@ const ProductView = () => {
     }
   };
 
+  // 篩選商品列表
+  const filteredGoodsList = selectedCategory
+    ? goodsList.filter(item => item.category === selectedCategory)
+    : goodsList;
+
   return (
     <>
       <div className={viewStyle.view_box}>
         <ul className={viewStyle.menu_block}>
           <li>產品類別</li>
-          <li>所有產品</li>
-          {category.map((obj) => (
-            <li key={obj}>{obj}</li>
+          <li 
+            className={selectedCategory === null ? viewStyle.active : ''}
+            onClick={() => handleCategorySelect(null)}
+          >
+            所有產品
+          </li>
+          {category.map((categoryName) => (
+            <li 
+              key={categoryName}
+              className={selectedCategory === categoryName ? viewStyle.active : ''}
+              onClick={() => handleCategorySelect(categoryName)}
+            >
+              {categoryName}
+            </li>
           ))}
         </ul>
         <div className={viewStyle.view_content}>
-          {goodsList.map((item) => (
-            <div key={item.id} className={viewStyle.card}>
-              <img
-                src={item.imageUrl ? item.imageUrl : "test.png"}
-                alt={item.content}
-                onClick={() => pushToDetail(item.id)}
-              />
-              <p>{item.title}</p>
-              <p>{item.description ?? ""}</p>
-              <span>
-                <del className="h6">${item.origin_price}</del>${item.price}
-                <div className={viewStyle.cart_btn}>
-                  {loadingCartId === item.id ? (
-                    <i className="bx bx-loader bx-spin"></i>
-                  ) : (
-                    <i
-                      className="bx bx-cart-add bx-sm"
-                      onClick={() => {
-                        joinCart(item.id, 1);
-                      }}
-                    ></i>
-                  )}
-                </div>
-              </span>
+          {filteredGoodsList.length > 0 ? (
+            filteredGoodsList.map((item) => (
+              <div key={item.id} className={viewStyle.card}>
+                <img
+                  src={item.imageUrl ? item.imageUrl : "test.png"}
+                  alt={item.content}
+                  onClick={() => pushToDetail(item.id)}
+                />
+                <p>{item.title}</p>
+                <p>{item.description ?? ""}</p>
+                <span>
+                  <del className="h6">${item.origin_price}</del>${item.price}
+                  <div className={viewStyle.cart_btn}>
+                    {loadingCartId === item.id ? (
+                      <i className="bx bx-loader bx-spin"></i>
+                    ) : (
+                      <i
+                        className="bx bx-cart-add bx-sm"
+                        onClick={() => {
+                          joinCart(item.id, 1);
+                        }}
+                      ></i>
+                    )}
+                  </div>
+                </span>
+              </div>
+            ))
+          ) : (
+            <div className={viewStyle.no_products}>
+              <p>此類別暫無產品</p>
             </div>
-          ))}
+          )}
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={pagination.total_pages}
-            onPageChange={handlePageChange}
-          />
+          {!selectedCategory && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={pagination.total_pages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
     </>

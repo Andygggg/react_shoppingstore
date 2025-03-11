@@ -166,7 +166,7 @@ const productSlice = createSlice({
         state.loading = true;
       })
       .addCase(getAllProducts.fulfilled, (state, action) => {
-        state.category = action.payload.products.map((item: any) => item.category)
+        state.category = [...new Set(action.payload.products.map((item: any) => item.category))] as string[];
         state.loading = false;
       })
       .addCase(getAllProducts.rejected, (state, action) => {
