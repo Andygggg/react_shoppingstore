@@ -277,7 +277,7 @@ const ProductForm = () => {
         <div className={FormStyle.moreImgs}>
           <label>更多圖片網址</label>
           {productData.imagesUrl.map((url, index) => (
-            <div key={index} className={FormStyle.imageUrlInput}>
+            <div key={index}>
               <input
                 type="text"
                 value={url}
@@ -309,12 +309,12 @@ const ProductForm = () => {
         {productData.imagesUrl.some((url) => url) && (
           <div className={FormStyle.preview_box}>
             <h3>預覽更多圖片</h3>
-            <div className={FormStyle.imageGrid}>
+            <div className={FormStyle.otherImg}>
               {productData.imagesUrl.map(
                 (url, idx) =>
                   url && (
                     <div key={idx} className={FormStyle.img_item}>
-                      <img src={url} alt={`Additional image ${idx + 1}`} />
+                      <img src={url} alt={`image ${idx + 1}`} />
                     </div>
                   )
               )}
