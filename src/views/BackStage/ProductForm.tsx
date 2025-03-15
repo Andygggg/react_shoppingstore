@@ -153,7 +153,7 @@ const ProductForm = () => {
           返回列表
         </button>
       </div>
-      <div className={FormStyle.form_box}>
+      <div className={FormStyle.form_body}>
         <div className={FormStyle.form_row}>
           <div className={FormStyle.input_item}>
             <label htmlFor="product_title">商品名稱</label>

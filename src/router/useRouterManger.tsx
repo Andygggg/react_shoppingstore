@@ -6,10 +6,14 @@ import HomePage from '@/views/ForeStage/HomePage';
 import ProductView from '@/views/ForeStage/ProductView';
 import ProductDetail from '@/views/ForeStage/ProductDetail';
 import ShoppingCart from '@/views/ForeStage/ShoppingCart';
+import About from '@/views/ForeStage/About';
 
 import BackStage from '@/views/BackStage/BackStage';
 import ProductList from '@/views/BackStage/ProductList';
 import ProductForm from '@/views/BackStage/ProductForm';
+import CouponList from '@/views/BackStage/CouponList';
+
+import NotFound from '@/views/NotFound';
 
 interface RouteMeta {   
   title: string;   
@@ -68,7 +72,16 @@ export const routes: RouteMenu[] = [
           title: "購物車",           
           isNavbar: false,         
         },       
-      },           
+      },     
+      {         
+        path: "about",         
+        name: "about",         
+        component: <About />,         
+        meta: {           
+          title: "關於我們",           
+          isNavbar: true,         
+        },       
+      },       
     ]   
   },
   {     
@@ -97,7 +110,24 @@ export const routes: RouteMenu[] = [
           isNavbar: false,         
         },       
       },
+      {         
+        path: "couponList",         
+        name: "couponList",         
+        component: <CouponList />,         
+        meta: {           
+          title: "優惠卷清單",           
+          isNavbar: true,         
+        },       
+      },
     ]
+  },
+  {     
+    path: "notFound",     
+    name: "notFound",     
+    component: <NotFound />,     
+    meta: {       
+      title: "404",     
+    }, 
   } 
 ];  
 

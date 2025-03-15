@@ -1,5 +1,5 @@
 import "./App.css";
-import { HashRouter, Routes } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import { renderRoutes } from '@/router/useRouterManger';
@@ -13,6 +13,7 @@ const App = () => {
         <div className="outer_box">
           <Routes>
             {renderRoutes()}
+            <Route path="*" element={<Navigate to="/notFound" replace />} />
           </Routes>
         </div>
       </HashRouter>

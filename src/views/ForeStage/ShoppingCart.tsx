@@ -21,6 +21,8 @@ const ShoppingCart = () => {
   const router = useRouter();
   const { cartList } = useSelector((state: RootState) => state.reception);
   const [isOrder, setIsOrder] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
+  const [countdown, setCountdown] = useState(5);
 
   const {
     register,
@@ -43,8 +45,6 @@ const ShoppingCart = () => {
     })();
   }, [dispatch]);
 
-  // console.log(cartList);
-
   const clearCart = async () => {
     const { message, success } = await dispatch(delAllCart()).unwrap();
     await dispatch(getClientCart());
@@ -56,6 +56,25 @@ const ShoppingCart = () => {
       })
     );
   };
+
+  useEffect(() => {
+    if (isPaid) {
+      // 只在isPaid為true時執行倒數
+      const timer = setInterval(() => {
+        setCountdown((prevCount) => {
+          if (prevCount <= 1) {
+            clearInterval(timer);
+            router.push("foreStage");
+            return 0;
+          }
+          return prevCount - 1;
+        });
+      }, 1000);
+  
+      // 清理函數
+      return () => clearInterval(timer);
+    }
+  }, [isPaid, router]);
 
   const editCart = async (id: string, product_id: string, qty: number) => {
     await dispatch(updateCartItem({ id, product_id, qty }));
@@ -76,8 +95,9 @@ const ShoppingCart = () => {
 
   const onSubmit = async (order: any) => {
     const { message, success } = await dispatch(orderCart(order)).unwrap();
-    reset();
+    if(!success) return
 
+    reset();
     dispatch(
       openMessage({
         success,
@@ -85,8 +105,7 @@ const ShoppingCart = () => {
       })
     );
     await dispatch(getClientCart());
-
-    router.push("foreStage");
+    setIsPaid(true)
   };
 
   const CartTable = () => {
@@ -319,6 +338,17 @@ const ShoppingCart = () => {
       </>
     );
   };
+
+  if (isPaid) {
+    return (
+      <>
+        <div className={cartStyle.paid_box}>
+          <span>付款成功，該筆訂單已成立</span>
+          <span>系統將於{countdown}秒後返回首頁</span>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './userStore';
 import productReducer from './productStore';
 import receptionReducer from './receptionStore'
+import couponReducer from './couponStore'
 import messageReducer from './messageStore'
 
 export const store = configureStore({
@@ -9,7 +10,8 @@ export const store = configureStore({
     user: userReducer,
     products: productReducer,
     reception: receptionReducer,
-    message: messageReducer
+    message: messageReducer,
+    coupon: couponReducer
   }
 });
 

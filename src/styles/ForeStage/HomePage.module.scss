@@ -1,0 +1,111 @@
+.home_box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.home_header {
+  width: 100%;
+  height: 350px;
+  position: relative;
+  margin-bottom: 20px;
+  padding: 0rem 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  color: #fff;
+
+  @media (max-width: 576px) {
+    height: 478px;
+    padding: 0rem 2rem
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../../assets/forest.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+  }
+
+  > p {
+    margin: 0.5rem 0rem;
+    font-size: 56px;
+    font-weight: bolder;
+    z-index: 10;
+  }
+
+  > span {
+    font-size: 24px;
+    font-weight: bolder;
+    z-index: 10;
+    padding-left: 1rem;
+    margin-bottom: 10px;
+  }
+}
+
+.home_body {
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin: 0 auto;
+
+  > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    &.reverse {
+      @media (min-width: 1024px) {
+        flex-direction: row-reverse;
+      }
+    }
+
+    > img {
+      width: calc(50% - 20px);
+      height: 350px;
+      border-radius: 10px;
+
+      @media (max-width: 1024px) {
+        width:500px;
+        height: auto;
+      }
+
+      @media (max-width: 576px) {
+        width:100%;
+        padding: 0rem 1rem;
+      }
+    }
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .text_width {
+    width: 50%;
+
+    @media (max-width: 1024px) {
+      width: 100%;
+      padding: 0rem 1rem;
+    }
+  }
+}

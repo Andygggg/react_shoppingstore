@@ -6,7 +6,7 @@ import { AppDispatch } from "../../stores/store";
 import { loginUser } from "../../stores/userStore";
 import { openMessage } from "@/stores/messageStore";
 
-import loginStyle from "@/styles/Modal/LoginModal.module.scss";
+import loginStyle from "@/styles/Modal/Modal.module.scss";
 import btnStyle from "@/styles/btn.module.scss";
 
 // 定義 props 的類型

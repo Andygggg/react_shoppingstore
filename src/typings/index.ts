@@ -10,7 +10,7 @@ export interface cartProduct {
   price: number;
   title: string;
   unit: string;
-};
+}
 
 export interface Product {
   id?: string; // `id` 在 Products 內有，但在 Product 內沒有
@@ -26,4 +26,14 @@ export interface Product {
   imageUrl: string;
   imagesUrl: string[];
   saveYear?: number; // `saveYear` 只在 Product 內出現
+}
+
+export interface Coupon {
+  title: string;
+  is_enabled: number;
+  percent: number;
+  due_date: number | string;
+  code: string;
+  num: number;
+  id: string;
 }

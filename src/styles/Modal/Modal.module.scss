@@ -1,0 +1,135 @@
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login_modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.modal_content {
+  background-color: #222;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+  z-index: 10;
+  padding: 24px;
+  width: 384px;
+  max-width: 90vw;
+  color: #eee;
+  border: 1px solid #444;
+  animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  > span {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  > button {
+    color: #999;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+
+    &:hover {
+      color: #ccc;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.form_item {
+  margin-bottom: 20px;
+
+  > label {
+    display: block;
+    color: #ccc;
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  > input {
+    appearance: none;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 4px;
+    width: 100%;
+    padding: 8px 12px;
+    color: white;
+    line-height: 1.5;
+
+    &:focus {
+      outline: none;
+      border-color: #777;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    &::placeholder {
+      color: #777;
+    }
+  }
+}
+
+.input_check {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn_item {
+  width: 100%;
+  margin-top: 60px;
+
+  > button {
+    width: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
