@@ -49,11 +49,6 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f0f0f0;
-  }
 }
 
 .modalBody {
@@ -154,33 +149,5 @@
   display: flex;
   justify-content: flex-end;
   padding: 16px 24px;
-  border-top: 1px solid #e0e0e0;
   gap: 12px;
-}
-
-.cancelButton, .confirmButton {
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-}
-
-.cancelButton {
-  background-color: #f5f5f5;
-  color: #333;
-
-  &:hover {
-    background-color: #e0e0e0;
-  }
-}
-
-.confirmButton {
-  background-color: #1976d2;
-  color: white;
-
-  &:hover {
-    background-color: #1565c0;
-  }
 }

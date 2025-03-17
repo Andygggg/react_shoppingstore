@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiAuth, PATH } from "../plugins/axios";
 
 const initialState: OrderState = {
-  odrders: [],
+  orders: [],
   pagination: {} as Pagination,
   loading: false,
   error: null,
 };
 
-export const getOdrders = createAsyncThunk(
-  "odrders/getOdrders",
+export const getOrders = createAsyncThunk(
+  "orders/getOrders",
   async (page: number = 1) => {
     try {
       const res = await apiAuth.get(`/api/${PATH}/admin/orders?page=${page}`);
@@ -21,7 +21,7 @@ export const getOdrders = createAsyncThunk(
 );
 
 export const editOrder = createAsyncThunk(
-  "odrders/editOrder",
+  "orders/editOrder",
   async (data: any, { rejectWithValue }) => {
     try {
       const res = await apiAuth.put(`/api/${PATH}/admin/order/${data.id}`, {data});
@@ -33,7 +33,7 @@ export const editOrder = createAsyncThunk(
 );
 
 export const deleteOrder = createAsyncThunk(
-  "odrders/delete",
+  "orders/delete",
   async (id: string) => {
     try {
       const { data } = await apiAuth.delete(`/api/${PATH}/admin/order/${id}`);
@@ -45,20 +45,20 @@ export const deleteOrder = createAsyncThunk(
 );
 
 const OrderSlice = createSlice({
-  name: "odrders",
+  name: "orders",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getOdrders.pending, (state) => {
+      .addCase(getOrders.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getOdrders.fulfilled, (state, action) => {
-        state.odrders = action.payload.orders;
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.orders = action.payload.orders;
         state.pagination = action.payload.pagination;
         state.loading = false;
       })
-      .addCase(getOdrders.rejected, (state, action) => {
+      .addCase(getOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "獲取失敗";
       });
@@ -68,7 +68,7 @@ const OrderSlice = createSlice({
 export default OrderSlice.reducer;
 
 interface OrderState {
-  odrders: any[];
+  orders: any[];
   pagination: Pagination;
   loading: boolean;
   error: string | null;

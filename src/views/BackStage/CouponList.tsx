@@ -98,12 +98,12 @@ const CouponList = () => {
   return (
     <div className={productStyle.list_box}>
       <div className={productStyle.header}>
-        <h2>優惠卷列表</h2>
+        <h2>優惠劵列表</h2>
         <button
           className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
           onClick={openModal}
         >
-          新增產品
+          新增優惠劵
         </button>
       </div>
 
@@ -111,7 +111,7 @@ const CouponList = () => {
         <table>
           <thead>
             <tr>
-              <th>優惠卷名稱</th>
+              <th>優惠劵名稱</th>
               <th>折扣</th>
               <th>數量</th>
               <th>使用期限</th>

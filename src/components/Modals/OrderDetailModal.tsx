@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../stores/store";
 import { openMessage } from "@/stores/messageStore";
-import { editOrder, getOdrders } from "@/stores/orderStore";
+import { editOrder, getOrders } from "@/stores/orderStore";
 import modalStyle from "@/styles/Modal/OrderDetailModal.module.scss";
+import btnStyle from "@/styles/btn.module.scss";
 
 interface OrderDetailModalProps {
   newData: any; // Order data from parent component
@@ -57,7 +58,7 @@ const OrderDetailModal = ({
           is_paid: true,
         });
 
-        await dispatch(getOdrders(1));
+        await dispatch(getOrders(1));
         onClose()
       }
     } catch (error) {
@@ -100,7 +101,7 @@ const OrderDetailModal = ({
                       orderData.is_paid ? modalStyle.paid : modalStyle.unpaid
                     }
                   >
-                    {orderData.is_paid ? "已付款" : "未付款"}
+                    {orderData.is_paid ? "付款" : "未付款"}
                   </span>
                 </p>
               </div>
@@ -146,12 +147,9 @@ const OrderDetailModal = ({
         </div>
 
         <div className={modalStyle.modalFooter}>
-          <button className={modalStyle.cancelButton} onClick={onClose}>
-            關閉
-          </button>
           {orderData && !orderData.is_paid && (
             <button
-              className={modalStyle.confirmButton}
+            className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
               onClick={handleConfirmPayment}
             >
               確認付款

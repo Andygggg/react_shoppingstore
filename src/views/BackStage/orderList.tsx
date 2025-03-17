@@ -5,7 +5,7 @@ import Pagination from "@/components/Tools/Pagination";
 import OrderDetailModal from "@/components/Modals/OrderDetailModal";
 
 import { AppDispatch, RootState } from "../../stores/store";
-import { getOdrders, deleteOrder } from "@/stores/orderStore";
+import { getOrders, deleteOrder } from "@/stores/orderStore";
 import { openMessage } from "@/stores/messageStore";
 
 import productStyle from "@/styles/BackStage/ProductList.module.scss";
@@ -13,7 +13,7 @@ import btnStyle from "@/styles/btn.module.scss";
 
 const OrderList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { odrders, loading, error, pagination } = useSelector(
+  const { orders, loading, error, pagination } = useSelector(
     (state: RootState) => state.order
   );
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +30,7 @@ const OrderList = () => {
   // 處理換頁
   const handlePageChange = async (page: number) => {
     setCurrentPage(page);
-    await dispatch(getOdrders(page));
+    await dispatch(getOrders(page));
   };
 
   const handleDelete = async (data: any) => {
@@ -47,7 +47,7 @@ const OrderList = () => {
           message,
         })
       );
-      if (success) await dispatch(getOdrders(1));
+      if (success) await dispatch(getOrders(1));
     } catch (err) {
       console.error("刪除產品時發生錯誤:", err);
       dispatch(
@@ -61,7 +61,7 @@ const OrderList = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getOdrders(1));
+      await dispatch(getOrders(1));
     })();
   }, [dispatch]);
 
@@ -87,6 +87,7 @@ const OrderList = () => {
         <table>
           <thead>
             <tr>
+            <th>訂單編號</th>
               <th>購買人</th>
               <th>信箱</th>
               <th>電話</th>
@@ -95,8 +96,9 @@ const OrderList = () => {
             </tr>
           </thead>
           <tbody>
-            {odrders.map((order) => (
+            {orders.map((order) => (
               <tr key={order.id}>
+                <td>{order.id}</td>
                 <td>{order.user.name}</td>
                 <td>{order.user.email}</td>
                 <td>{order.user.tel}</td>
