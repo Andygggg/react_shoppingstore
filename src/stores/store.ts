@@ -3,6 +3,7 @@ import userReducer from './userStore';
 import productReducer from './productStore';
 import receptionReducer from './receptionStore'
 import couponReducer from './couponStore'
+import orderReducer from './orderStore'
 import messageReducer from './messageStore'
 
 export const store = configureStore({
@@ -11,7 +12,8 @@ export const store = configureStore({
     products: productReducer,
     reception: receptionReducer,
     message: messageReducer,
-    coupon: couponReducer
+    coupon: couponReducer,
+    order: orderReducer,
   }
 });
 

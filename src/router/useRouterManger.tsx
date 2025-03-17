@@ -12,6 +12,7 @@ import BackStage from '@/views/BackStage/BackStage';
 import ProductList from '@/views/BackStage/ProductList';
 import ProductForm from '@/views/BackStage/ProductForm';
 import CouponList from '@/views/BackStage/CouponList';
+import OrderList from '@/views/BackStage/orderList';
 
 import NotFound from '@/views/NotFound';
 
@@ -116,6 +117,15 @@ export const routes: RouteMenu[] = [
         component: <CouponList />,         
         meta: {           
           title: "優惠卷清單",           
+          isNavbar: true,         
+        },       
+      },
+      {         
+        path: "orderList",         
+        name: "orderList",         
+        component: <OrderList />,         
+        meta: {           
+          title: "訂單清單",           
           isNavbar: true,         
         },       
       },
