@@ -209,6 +209,7 @@ const ShoppingCart = () => {
           <button
             className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
             onClick={() => setIsOrder(true)}
+            disabled={cartList.length < 1}
           >
             前往結帳
           </button>
