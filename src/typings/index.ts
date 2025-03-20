@@ -1,15 +1,26 @@
 export interface cartProduct {
+  id: string; // `id` 在 Products 內有，但在 Product 內沒有
   category: string;
   content: string;
   description: string;
-  id: string;
-  imageUrl: string;
-  imagesUrl: string[];
-  is_enabled: number; // 1 表示啟用, 0 表示未啟用
+  is_enabled: number;
   origin_price: number;
   price: number;
   title: string;
   unit: string;
+  num?: number; // `num` 只在 Products 內出現
+  imageUrl: string;
+  imagesUrl: string[];
+  saveYear?: number; // `saveYear` 只在 Product 內出現
+}
+
+export interface Cart {
+  final_total: number;
+  id: string;
+  product: cartProduct;
+  product_id: string;
+  qty: number;
+  total: number;
 }
 
 export interface Product {
@@ -36,4 +47,21 @@ export interface Coupon {
   code: string;
   num: number;
   id: string;
+}
+
+export interface Order {
+  create_at: number;
+  id: string;
+  is_paid: boolean;
+  message: string;
+  num: number;
+  products: { [key: string]: Cart };
+  total: number;
+  user: {
+    address: string;
+    email: string;
+    message: string;
+    name: string;
+    tel: string;
+  };
 }

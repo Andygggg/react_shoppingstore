@@ -6,8 +6,10 @@ import { editOrder, getOrders } from "@/stores/orderStore";
 import modalStyle from "@/styles/Modal/OrderDetailModal.module.scss";
 import btnStyle from "@/styles/btn.module.scss";
 
+import { Order } from "@/typings";
+
 interface OrderDetailModalProps {
-  newData: any; // Order data from parent component
+  newData: Order; // Order data from parent component
   isOpen: boolean;
   onClose: () => void;
 }
@@ -18,14 +20,11 @@ const OrderDetailModal = ({
   onClose,
 }: OrderDetailModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [orderData, setOrderData] = useState<any>(null);
+  const [orderData, setOrderData] = useState<Order>({} as Order);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Use the data passed from parent component
     if (newData && newData.id) {
-      console.log(newData);
-
       setOrderData(newData);
       setLoading(false);
     } else {
@@ -40,8 +39,6 @@ const OrderDetailModal = ({
       ...orderData,
       is_paid: true, // 更新為已付款
     };
-    console.log(editData);
-
     try {
       const { message, success } = await dispatch(editOrder(editData)).unwrap();
 
@@ -72,7 +69,6 @@ const OrderDetailModal = ({
     }
   };
 
-  // Don't render if modal is not open
   if (!isOpen) return null;
 
   return (
@@ -119,7 +115,7 @@ const OrderDetailModal = ({
                   <tbody>
                     {orderData.products &&
                       Object.values(orderData.products).map(
-                        (item: any, index) => (
+                        (item, index) => (
                           <tr key={index}>
                             <td>{item.product.title}</td>
                             <td>{item.qty}</td>

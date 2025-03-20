@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiAuth, PATH } from "../plugins/axios";
 
+import { Order } from "@/typings";
+
 const initialState: OrderState = {
   orders: [],
   pagination: {} as Pagination,
@@ -22,7 +24,7 @@ export const getOrders = createAsyncThunk(
 
 export const editOrder = createAsyncThunk(
   "orders/editOrder",
-  async (data: any, { rejectWithValue }) => {
+  async (data: Order, { rejectWithValue }) => {
     try {
       const res = await apiAuth.put(`/api/${PATH}/admin/order/${data.id}`, {data});
       return res.data;
@@ -68,7 +70,7 @@ const OrderSlice = createSlice({
 export default OrderSlice.reducer;
 
 interface OrderState {
-  orders: any[];
+  orders: Order[];
   pagination: Pagination;
   loading: boolean;
   error: string | null;

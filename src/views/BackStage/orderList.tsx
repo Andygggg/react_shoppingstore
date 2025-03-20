@@ -7,6 +7,7 @@ import OrderDetailModal from "@/components/Modals/OrderDetailModal";
 import { AppDispatch, RootState } from "../../stores/store";
 import { getOrders, deleteOrder } from "@/stores/orderStore";
 import { openMessage } from "@/stores/messageStore";
+import { Order } from "@/typings";
 
 import productStyle from "@/styles/BackStage/ProductList.module.scss";
 import btnStyle from "@/styles/btn.module.scss";
@@ -18,9 +19,9 @@ const OrderList = () => {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const currentOrder = useRef<any>({});
+  const currentOrder = useRef<Order>({} as Order);
 
-  const openModal = (item: any): void => {
+  const openModal = (item: Order): void => {
     currentOrder.current = item;
     setIsModalOpen(true);
   };
@@ -33,7 +34,7 @@ const OrderList = () => {
     await dispatch(getOrders(page));
   };
 
-  const handleDelete = async (data: any) => {
+  const handleDelete = async (data: Order) => {
     if (!data.id) return;
 
     try {

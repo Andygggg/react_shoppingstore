@@ -1,23 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api, PATH } from "../plugins/axios";
-import { cartProduct } from "@/typings";
-
-interface ProductState {
-  goodsList: cartProduct[];
-  cartList: any[];
-  goods: cartProduct;
-  category: string[],
-  pagination: {
-    current_page: number;
-    total_pages: number;
-  };
-  loading: boolean;
-  error: string | null;
-  loadingCartId: string | null;
-}
+import { cartProduct, Cart } from "@/typings";
 
 const initialState: ProductState = {
   goodsList: [],
+  goodsTop3: [],
   cartList: [],
   goods: {} as cartProduct,
   category: [],
@@ -83,10 +70,7 @@ export const addToCart = createAsyncThunk(
   async ({ id, qty }: { id: string; qty: number }) => {
     try {
       const res = await api.post(`/api/${PATH}/cart`, {
-        data: {
-          product_id: id,
-          qty,
-        },
+        data: { product_id: id, qty },
       });
       return res.data;
     } catch (error) {
@@ -97,21 +81,10 @@ export const addToCart = createAsyncThunk(
 
 export const updateCartItem = createAsyncThunk(
   "shopping/updateCartItem",
-  async ({
-    id,
-    product_id,
-    qty,
-  }: {
-    id: string;
-    product_id: string;
-    qty: number;
-  }) => {
+  async ({ id, product_id, qty }: query) => {
     try {
       const res = await api.put(`/api/${PATH}/cart/${id}`, {
-        data: {
-          product_id,
-          qty,
-        },
+        data: { product_id, qty },
       });
 
       return res.data;
@@ -166,7 +139,10 @@ const productSlice = createSlice({
         state.loading = true;
       })
       .addCase(getAllProducts.fulfilled, (state, action) => {
-        state.category = [...new Set(action.payload.products.map((item: any) => item.category))] as string[];
+        state.category = [
+          ...new Set(action.payload.products.map((item: any) => item.category)),
+        ] as string[];
+        state.goodsTop3 = action.payload.products.slice(0, 3);
         state.loading = false;
       })
       .addCase(getAllProducts.rejected, (state, action) => {
@@ -236,3 +212,24 @@ const productSlice = createSlice({
 });
 
 export default productSlice.reducer;
+
+interface query {
+  id: string;
+  product_id: string;
+  qty: number;
+}
+
+interface ProductState {
+  goodsList: cartProduct[];
+  goodsTop3: cartProduct[];
+  cartList: Cart[];
+  goods: cartProduct;
+  category: string[];
+  pagination: {
+    current_page: number;
+    total_pages: number;
+  };
+  loading: boolean;
+  error: string | null;
+  loadingCartId: string | null;
+}

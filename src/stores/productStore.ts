@@ -79,8 +79,11 @@ export const uploadImg = createAsyncThunk(
   async (file: any) => {
     try {
       const formData = new FormData();
-  formData.append("file-to-upload", file);
-      const { data } = await apiAuth.post(`/api/${PATH}/admin/upload`, formData);
+      formData.append("file-to-upload", file);
+      const { data } = await apiAuth.post(
+        `/api/${PATH}/admin/upload`,
+        formData
+      );
       return data;
     } catch (error) {
       console.log(error);

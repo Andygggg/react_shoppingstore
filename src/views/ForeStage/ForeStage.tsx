@@ -31,7 +31,6 @@ const ForeStage = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 1024) {
-        console.log("螢幕寬度小於 1024px，觸發方法");
         setIsSmallScreen(true);
       } else {
         setIsSmallScreen(false);
@@ -45,6 +44,10 @@ const ForeStage = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const goToGitHub = () => {
+    window.open("https://github.com/Andygggg/react_shoppingstore", "_blank");
+  };
 
   const Navbar = () => {
     return (
@@ -124,9 +127,9 @@ const ForeStage = () => {
             <Outlet />
           </div>
           <div className={layoutStyles.container_footer}>
-            <i className="bx bxl-instagram bx-lg"></i>
-            <i className="bx bxl-facebook-circle bx-lg"></i>
-            <i className="bx bxl-github bx-lg"></i>
+            <i className="bx bxl-instagram bx-lg" onClick={goToGitHub}></i>
+            <i className="bx bxl-facebook-circle bx-lg" onClick={goToGitHub}></i>
+            <i className="bx bxl-github bx-lg" onClick={goToGitHub}></i>
           </div>
         </div>
       </div>
