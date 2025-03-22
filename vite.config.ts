@@ -7,11 +7,22 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: "dist",
-    minify: 'terser',
+    minify: 'esbuild',
     terserOptions: {
       compress: {
         drop_console: true,
-        drop_debugger: true 
+        drop_debugger: true
+      },
+      format: {
+        comments: false
+      }
+    },
+    // Disable build logs
+    reportCompressedSize: false,
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
       }
     }
   },
@@ -34,4 +45,6 @@ export default defineConfig({
       },
     },
   },
+  // Disable Vite's own logs
+  logLevel: 'silent'
 });
