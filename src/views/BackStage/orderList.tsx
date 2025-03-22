@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Pagination from "@/components/Tools/Pagination";
 import OrderDetailModal from "@/components/Modals/OrderDetailModal";
+import MessageModal from "@/components/Modals/MessageModal";
 
 import { AppDispatch, RootState } from "../../stores/store";
 import { getOrders, deleteOrder } from "@/stores/orderStore";
@@ -19,6 +20,8 @@ const OrderList = () => {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
   const currentOrder = useRef<Order>({} as Order);
 
   const openModal = (item: Order): void => {
@@ -28,18 +31,29 @@ const OrderList = () => {
 
   const closeModal = (): void => setIsModalOpen(false);
 
+  const handleDeleteMessage = async (data: Order) => {
+    if (!data.id) return;
+    setOrderId(data.id);
+    setIsMessageOpen(true);
+  };
+
+  const handleCloseMessage = () => {
+    setIsMessageOpen(false);
+    setOrderId(null);
+  };
+
   // 處理換頁
   const handlePageChange = async (page: number) => {
     setCurrentPage(page);
     await dispatch(getOrders(page));
   };
 
-  const handleDelete = async (data: Order) => {
-    if (!data.id) return;
+  const handleDelete = async () => {
+    if (!orderId) return;
 
     try {
       const { success, message } = await dispatch(
-        deleteOrder(data.id)
+        deleteOrder(orderId)
       ).unwrap();
 
       dispatch(
@@ -57,6 +71,9 @@ const OrderList = () => {
           message: "刪除產品時發生錯誤",
         })
       );
+    }finally {
+      setIsMessageOpen(false);
+      setOrderId(null);
     }
   };
 
@@ -88,7 +105,7 @@ const OrderList = () => {
         <table>
           <thead>
             <tr>
-            <th>訂單編號</th>
+              <th>訂單編號</th>
               <th>購買人</th>
               <th>信箱</th>
               <th>電話</th>
@@ -125,7 +142,7 @@ const OrderList = () => {
                     </button>
                     <button
                       className={`${btnStyle.btn} ${btnStyle.btnDanger}`}
-                      onClick={() => handleDelete(order)}
+                      onClick={() => handleDeleteMessage(order)}
                     >
                       刪除
                     </button>
@@ -148,6 +165,14 @@ const OrderList = () => {
         onClose={closeModal}
         newData={currentOrder.current}
       ></OrderDetailModal>
+
+      <MessageModal
+        isOpen={isMessageOpen}
+        onClose={handleCloseMessage}
+        onConfirm={handleDelete}
+        title="確認刪除"
+        message="確定要刪除此產品嗎？"
+      />
     </div>
   );
 };

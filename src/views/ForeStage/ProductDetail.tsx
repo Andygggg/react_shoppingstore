@@ -12,7 +12,7 @@ const ProductDetail = () => {
   const { productId } = router.routerParams;
 
   const dispatch = useDispatch<AppDispatch>();
-  const { goods } = useSelector((state: RootState) => state.reception);
+  const { goods, loading } = useSelector((state: RootState) => state.reception);
   const [cartQuantity, setCartQuantity] = useState<number>(1);
   const [currentImg, setCurrentImg] = useState<string>(goods.imageUrl);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -42,6 +42,12 @@ const ProductDetail = () => {
     await dispatch(addToCart({ id, qty: cartQuantity }));
     setLoading(false);
   };
+
+  const formatNumber = (num?: number) => num !== undefined ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : num;
+
+  if (loading) {
+    return <div className='loading'><i className="bx bx-loader bx-spin bx-lg"></i></div>;
+  }
 
   return (
     <>
@@ -81,11 +87,11 @@ const ProductDetail = () => {
           </div>
           <div className={detailStyle.row}>
             <span className={detailStyle.second_title}>原價</span>
-            <del>{goods.origin_price} 元</del>
+            <del>{formatNumber(goods.origin_price)} 元</del>
           </div>
           <div className={detailStyle.row}>
             <span className={detailStyle.second_title}>優惠價</span>
-            <span className={detailStyle.money}>{goods.price} 元</span>
+            <span className={detailStyle.money}>{formatNumber(goods.price)} 元</span>
           </div>
           <div className={detailStyle.row} style={{ marginTop: "auto" }}>
             <div className={detailStyle.quantity_input}>
@@ -101,7 +107,7 @@ const ProductDetail = () => {
             </div>
           </div>
           <div className={detailStyle.row} style={{ marginTop: "20px" }}>
-            <span>合計{goods.price * cartQuantity}元</span>
+            <span>合計{formatNumber(goods.price * cartQuantity)}元</span>
             <button
               type="button"
               className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}

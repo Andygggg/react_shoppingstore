@@ -17,7 +17,6 @@ interface ModalProps {
   onClose: () => void;
 }
 
-// 使用函數聲明而非 React.FC
 const CouponModal = ({ isOpen, onClose, newData }: ModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [coupon, setCoupon] = useState<Coupon>({} as Coupon);
@@ -27,43 +26,36 @@ const CouponModal = ({ isOpen, onClose, newData }: ModalProps) => {
     e.preventDefault();
 
     try {
-      if(isCreate) {
+      if (isCreate) {
         const { message, success } = await dispatch(addCoupon(coupon)).unwrap();
-
-        dispatch(
-          openMessage({
-            success,
-            message,
-          })
-        );
+        dispatch(openMessage({ success, message }));
       } else {
-        const { message, success } = await dispatch(editCoupon(coupon)).unwrap();
-
-        dispatch(
-          openMessage({
-            success,
-            message,
-          })
-        );
+        const { message, success } = await dispatch(
+          editCoupon(coupon)
+        ).unwrap();
+        dispatch(openMessage({ success, message }));
       }
       await dispatch(getCoupons(1));
       onClose();
     } catch (error) {
-      dispatch(
-        openMessage({
-          success: false,
-          message: "操作失敗",
-        })
-      );
+      dispatch(openMessage({ success: false, message: "操作失敗" }));
       console.error("失敗:", error);
     }
   };
 
   const handleInput = (name: string, value: any) => {
-    setCoupon((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name === "due_date") {
+      const timestamp = moment(value).unix();
+      setCoupon((prev) => ({
+        ...prev,
+        [name]: timestamp,
+      }));
+    } else {
+      setCoupon((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   useEffect(() => {
@@ -103,7 +95,18 @@ const CouponModal = ({ isOpen, onClose, newData }: ModalProps) => {
               id="percent"
               type="number"
               value={coupon.percent}
-              onChange={(e) => handleInput("percent", e.target.value)}
+              onChange={(e) => handleInput("percent", Number(e.target.value))}
+              required
+            />
+          </div>
+
+          <div className={couponStyle.form_item}>
+            <label htmlFor="code">優惠碼代號</label>
+            <input
+              id="code"
+              type="text"
+              value={coupon.code}
+              onChange={(e) => handleInput("code", e.target.value)}
               required
             />
           </div>

@@ -129,6 +129,18 @@ export const orderCart = createAsyncThunk(
   }
 );
 
+export const getProductCoupon = createAsyncThunk(
+  "shopping/getProductCoupon",
+  async (code: string) => {
+    try {
+      const res = await api.post(`/api/${PATH}/coupon`, {data: {code} });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "shopping",
   initialState,
@@ -175,8 +187,15 @@ const productSlice = createSlice({
         state.error = action.error.message || null;
       })
 
+      .addCase(getClientProduct.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(getClientProduct.fulfilled, (state, action) => {
+        state.loading = false;
         state.goods = action.payload.product;
+      })
+      .addCase(getClientProduct.rejected, (state) => {
+        state.loading = false;
       })
 
       .addCase(delGoods.pending, (state) => {

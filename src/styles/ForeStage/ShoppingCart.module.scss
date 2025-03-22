@@ -169,7 +169,7 @@
   justify-content: flex-end;
   gap: 20px;
 
-  >button {
+  > button {
     white-space: nowrap;
   }
 
@@ -244,7 +244,7 @@
   color: #fff;
   border-radius: 10px;
 
-   @media (max-width: 1200px) {
+  @media (max-width: 1200px) {
     width: 100%;
     order: 1;
     margin: 0 auto;
@@ -269,6 +269,17 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
+    }
+
+    input {
+      border-radius: 5px;
+      background: #5e5d5d88;
+      border: none;
+      padding: 0.5rem;
+
+      &:focus {
+        outline: none;
+      }
     }
   }
 }

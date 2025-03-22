@@ -3,60 +3,54 @@ import { useDispatch } from "react-redux";
 
 import { useRouter } from "@/router/useRouterManger";
 import { AppDispatch } from "../../stores/store";
-import { loginUser } from "../../stores/userStore";
+import { loginUser, checkLoginStatus } from "../../stores/userStore";
 import { openMessage } from "@/stores/messageStore";
 
 import loginStyle from "@/styles/Modal/Modal.module.scss";
 import btnStyle from "@/styles/btn.module.scss";
 
-// 定義 props 的類型
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// 使用函數聲明而非 React.FC
 const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
-  });
-  
+  const [user, setUser] = useState({ username: "", password: "" });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const { message, success } = await dispatch(loginUser(user)).unwrap();
+      dispatch(openMessage({ success, message }));
 
-      dispatch(
-        openMessage({
-          success,
-          message,
-        })
-      );
-      if (success) router.push("admin");
+      if (success) await checkUserToken();
     } catch (error) {
-      dispatch(
-        openMessage({
-          success: false,
-          message: "登入失敗",
-        })
-      );
+      dispatch(openMessage({ success: false, message: "登入失敗" }));
       console.error("登入失敗:", error);
     }
   };
 
-  const handleInput = (name: string, value: string) => {
-    setUser((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const checkUserToken = async () => {
+    const { success } = await dispatch(checkLoginStatus()).unwrap();
+
+    dispatch(
+      openMessage({
+        success: success,
+        message: success ? "登入驗證成功" : "登入驗證失敗",
+      })
+    );
+    if (success) {
+      router.push("admin");
+    }
   };
 
-  // 如果 isOpen 為 false，則不渲染任何內容
+  const handleInput = (name: string, value: string) => {
+    setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
   if (!isOpen) return null;
 
   return (

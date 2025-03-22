@@ -10,7 +10,7 @@ import viewStyle from "@/styles/ForeStage/ProductView.module.scss";
 const ProductView = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const { goodsList, pagination, category } = useSelector(
+  const { goodsList, pagination, category, loading } = useSelector(
     (state: RootState) => state.reception
   );
 
@@ -49,26 +49,39 @@ const ProductView = () => {
     }
   };
 
+  const formatNumber = (num: number) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
   // 篩選商品列表
   const filteredGoodsList = selectedCategory
-    ? goodsList.filter(item => item.category === selectedCategory)
+    ? goodsList.filter((item) => item.category === selectedCategory)
     : goodsList;
+
+  if (loading) {
+    return (
+      <div className="loading">
+        <i className="bx bx-loader bx-spin bx-lg"></i>
+      </div>
+    );
+  }
 
   return (
     <>
       <div className={viewStyle.view_box}>
         <ul className={viewStyle.menu_block}>
           <li>產品類別</li>
-          <li 
-            className={selectedCategory === null ? viewStyle.active : ''}
+          <li
+            className={selectedCategory === null ? viewStyle.active : ""}
             onClick={() => handleCategorySelect(null)}
           >
             所有產品
           </li>
           {category.map((categoryName) => (
-            <li 
+            <li
               key={categoryName}
-              className={selectedCategory === categoryName ? viewStyle.active : ''}
+              className={
+                selectedCategory === categoryName ? viewStyle.active : ""
+              }
               onClick={() => handleCategorySelect(categoryName)}
             >
               {categoryName}
@@ -87,7 +100,8 @@ const ProductView = () => {
                 <p>{item.title}</p>
                 <p>{item.description ?? ""}</p>
                 <span>
-                  <del className="h6">${item.origin_price}</del>${item.price}
+                  <del className="h6">${formatNumber(item.origin_price)}</del>$
+                  {formatNumber(item.price)}
                   <div className={viewStyle.cart_btn}>
                     {loadingCartId === item.id ? (
                       <i className="bx bx-loader bx-spin"></i>

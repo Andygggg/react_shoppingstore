@@ -13,7 +13,7 @@ import type { Product } from "@/typings";
 import { useRouter } from "@/router/useRouterManger";
 
 import FormStyle from "@/styles/BackStage/ProductForm.module.scss";
-import btnStyle from '@/styles/btn.module.scss'
+import btnStyle from "@/styles/btn.module.scss";
 
 const ProductForm = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -82,15 +82,15 @@ const ProductForm = () => {
       await addProduct();
       return;
     }
-    const obj = { id: id, data: productData };
-    const { success, message } = await dispatch(editProduct(obj)).unwrap();
+    try {
+      const obj = { id: id, data: productData };
+      const { success, message } = await dispatch(editProduct(obj)).unwrap();
 
-    dispatch(
-      openMessage({
-        success,
-        message,
-      })
-    );
+      dispatch(openMessage({ success, message }));
+    } catch (error) {
+      dispatch(openMessage({ success: false, message: "編輯失敗" }));
+      console.log(error);
+    }
   };
 
   const addProduct = async () => {
@@ -98,22 +98,12 @@ const ProductForm = () => {
       const { success, message } = await dispatch(
         uploadProduct(productData)
       ).unwrap();
-
-      dispatch(
-        openMessage({
-          success,
-          message,
-        })
+      dispatch(openMessage({success,message})
       );
-
       if (success) setProductData(initialProductData);
     } catch (error: any) {
       console.log(error);
-      dispatch(
-        openMessage({
-          success: false,
-          message: error.message,
-        })
+      dispatch(openMessage({success: false,message: error.message,})
       );
     }
   };
@@ -121,22 +111,21 @@ const ProductForm = () => {
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-  
+
     try {
       const img = await dispatch(uploadImg(file)).unwrap();
       if (img && img.imageUrl) {
-        dispatch(openMessage({ success: true, message: '上傳成功' }));
+        dispatch(openMessage({ success: true, message: "上傳成功" }));
         setProductData((prev) => ({
           ...prev,
           imageUrl: img.imageUrl,
         }));
       } else {
-        throw new Error('Upload failed - no image URL received');
+        throw new Error("Upload failed - no image URL received");
       }
     } catch (error) {
       console.log(error);
-      
-      dispatch(openMessage({ success: false, message: '上傳失敗' }));
+      dispatch(openMessage({ success: false, message: "上傳失敗" }));
     }
   };
 
@@ -146,9 +135,7 @@ const ProductForm = () => {
         <h2>產品編輯</h2>
         <button
           className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
-          onClick={() =>
-            router.push("productList")
-          }
+          onClick={() => router.push("productList")}
         >
           返回列表
         </button>
@@ -292,7 +279,10 @@ const ProductForm = () => {
               </button>
             </div>
           ))}
-          <button onClick={addImageUrl} className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}>
+          <button
+            onClick={addImageUrl}
+            className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
+          >
             新增圖片網址
           </button>
         </div>
@@ -324,7 +314,10 @@ const ProductForm = () => {
       </div>
 
       <div className={FormStyle.btn_row}>
-        <button className={`${btnStyle.btn} ${btnStyle.btnPrimary}`} onClick={saveProduct}>
+        <button
+          className={`${btnStyle.btn} ${btnStyle.btnPrimary}`}
+          onClick={saveProduct}
+        >
           儲存
         </button>
       </div>

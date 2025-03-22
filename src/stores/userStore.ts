@@ -28,7 +28,7 @@ export const checkLoginStatus = createAsyncThunk(
   async () => {
     try {
       const res = await apiAuth.post("/api/user/check");
-      return res.data.success;
+      return res.data;
     } catch (error) {
       console.log(error);
     }
