@@ -7,24 +7,9 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: "dist",
-    minify: 'esbuild',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      },
-      format: {
-        comments: false
-      }
-    },
-    // Disable build logs
-    reportCompressedSize: false,
-    cssCodeSplit: true,
-    rollupOptions: {
-      output: {
-        manualChunks: undefined
-      }
-    }
+  },
+  esbuild: {
+    drop: process.env.NODE_ENV === 'production' ? ['console']: []
   },
   server: {
     open: true,
@@ -45,6 +30,4 @@ export default defineConfig({
       },
     },
   },
-  // Disable Vite's own logs
-  logLevel: 'silent'
 });
