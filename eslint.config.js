@@ -23,6 +23,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
       "@typescript-eslint/no-explicit-any": ["off"]
     },
   },
